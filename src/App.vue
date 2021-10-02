@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import {v4 as uuid} from 'uuid';
+import axios from 'axios';
 
 import Header from './components/layout/Header';
 import Todos from './components/Todos';
@@ -22,34 +22,40 @@ export default {
   },
   data() {
     return {
-      todos: [
-        {
-          id: uuid(),
-          title: 'Todo One',
-          completed: false,
-        },
-        {
-          id: uuid(),
-          title: 'Todo Two',
-          completed: true,
-        },
-        {
-          id: uuid(),
-          title: 'Todo Three',
-          completed: false,
-        },
-      ],
+      todos: [],
     };
   },
   methods: {
     deleteTodo(id) {
       this.todos = this.todos.filter(todo => todo.id !== id);
     },
-    addTodo(newTodo) {
-      newTodo.id = uuid();
-      this.todos.push(newTodo);
+    async addTodo(newTodo) {
+      const { title, completed } = newTodo;
+
+      try {
+        const { data } = await axios.post(
+          'https://jsonplaceholder.typicode.com/todos',
+          { title, completed },
+        );
+        this.todos.push(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
+    async getAllTodos() {
+      try {
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/todos?_limit=5'
+        );
+        this.todos = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
+  created() {
+    this.getAllTodos();
+  }
 }
 </script>
 
