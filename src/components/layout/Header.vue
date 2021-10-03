@@ -1,6 +1,10 @@
 <template>
   <header class="header">
     <h1>TodoList</h1>
+    <div id="nav">
+      <router-link to="/">Home</router-link>
+      <router-link to="/about">About</router-link>
+    </div>
   </header>
 </template>
 
@@ -19,7 +23,22 @@ export default {
 
     a {
       color: #fff;
-      padding-right: 5px;
+      margin-right: 5px;
+      padding-bottom: 2px;
+      text-decoration: none;
+      transition: all 0.3s ease-in-out 0s;
+
+      &:hover {
+        color: #aaa;
+
+        &.router-link-exact-active {
+          border-color: #aaa;
+        }
+      }
+
+      &.router-link-exact-active {
+        border-bottom: 1px solid #fff;
+      }
     }
   }
 </style>
